@@ -5,7 +5,8 @@
   "main": "nodemon index.js",
   "scripts": {
     "dev": "nodemon .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +21,6 @@
   },
   "devDependencies": {
     "@types/node": "^18.14.6",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.22"
   }
 }
