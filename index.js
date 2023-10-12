@@ -34,9 +34,24 @@ app.get('/aba7teams', async (req,res)=>{
     const TeamData = await googleSheets.spreadsheets.values.get({
         auth,
         spreadsheetId: ABA7spreadsheetID,
-        range: 'ABA7Teams!2:900'
+        range: 'ABA7Teams!1:900'
     })
     res.send(TeamData.data.values);
+})
+
+app.get('/aba7stats', async (req,res)=>{
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({version: 'v4', auth: client});
+    const StatsData = await googleSheets.spreadsheets.values.get({
+        auth,
+        spreadsheetId: ABA7spreadsheetID,
+        range: 'ABA7Stats!2:900'
+    })
+    res.send(StatsData.data.values);
 })
 
 app.get('/aba6images', async(req, res)=>{
@@ -116,6 +131,7 @@ app.get('/aba6images', async(req, res)=>{
     ]
     res.send(ABA6galleryImages)
 })
+
 app.get('/aba5images', async(req, res)=>{
     const ABA5galleryImages = [
         {
@@ -172,6 +188,7 @@ app.get('/aba5images', async(req, res)=>{
     ]
     res.send(ABA5galleryImages)
 })
+
 
 
 
