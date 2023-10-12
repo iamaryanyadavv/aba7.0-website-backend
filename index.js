@@ -46,38 +46,40 @@ app.get('/aba7teams', async (req,res)=>{
 
 app.get('/aba6images', async(req, res)=>{
 
-    const params = {
-      Bucket: process.env.S3_BUCKET_NAME,
-      Prefix: 'ABA6.0/'
-    };
-  
-    s3.listObjects(params, (err, data) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send('Error listing objects in S3 bucket');
-      } else {
-        const images = data.Contents.map(obj => obj.Key);
-        res.json(images);
-      }
-    });
-  })
+  const params = {
+    Bucket: bucketName,
+    Prefix: 'ABA 6.0/'
+  };
+
+  s3.listObjects(params, (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error listing objects in S3 bucket');
+    } else {
+      const images = data.Contents.map(obj => `https://abagallery.s3.ap-south-1.amazonaws.com/${obj.Key}`);
+      res.json(images);
+    }
+  });
+});
+
 app.get('/aba5images', async(req, res)=>{
 
-    const params = {
-      Bucket: bucketName,
-      Prefix: 'ABA5.0/'
-    };
-  
-    s3.listObjects(params, (err, data) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send('Error listing objects in S3 bucket');
-      } else {
-        const images = data.Contents.map(obj => obj.Key);
-        res.json(images);
-      }
-    });
-  })
+  const params = {
+    Bucket: bucketName,
+    Prefix: 'ABA 2022/'
+  };
+
+  s3.listObjects(params, (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error listing objects in S3 bucket');
+    } else {
+      const images = data.Contents.map(obj => `https://abagallery.s3.ap-south-1.amazonaws.com/${obj.Key}`);
+      res.json(images);
+    }
+  });
+});
+
 
 
 
