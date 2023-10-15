@@ -95,6 +95,40 @@ app.get('/aba5images', async (req, res) => {
     });
 });
 
+app.post('/aba7fantasy', async (req, res) =>{
+
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({version: 'v4', auth: client});
+    const response = await googleSheets.spreadsheets.values.append({
+        spreadsheetId: ABA7spreadsheetID,
+        range: "ABA7Fantasy",
+        valueInputOption: "USER_ENTERED",
+        resource: {
+            // image, firstname, middlename, lastname, emailid, batch, phone, gender, primarypos, secondpos, comment
+            values: [[
+                req.body.picture,
+                req.body.name,
+                req.body.email,
+                req.body.player1,
+                req.body.player1email,
+                req.body.player2,
+                req.body.player2email,
+                req.body.player3,
+                req.body.player3email,
+                req.body.player4,
+                req.body.player4email,
+                req.body.player5,
+                req.body.player5email,
+            ]],
+        },
+      });
+      res.send(response)
+} )
+
 
 app.post('/image', async (req, res) =>{
 
