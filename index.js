@@ -128,6 +128,7 @@ app.post('/aba7fantasy', async (req, res) =>{
                 req.body.picture,
                 req.body.name,
                 req.body.email,
+                req.body.authid,
                 req.body.player1,
                 req.body.player1email,
                 req.body.player1gender,
