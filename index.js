@@ -43,6 +43,81 @@ app.get('/aba7teams', async (req, res) => {
     res.send(TeamData.data.values);
 })
 
+app.get('/aba7teamlist', async (req, res) => {
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({ version: 'v4', auth: client });
+    const TeamData = await googleSheets.spreadsheets.values.get({
+        auth,
+        spreadsheetId: ABA7spreadsheetID,
+        range: 'ABA7TeamBudgetSplits!1:900'
+    })
+    res.send(TeamData.data.values);
+})
+
+app.get('/aba7standings/a', async (req,res)=>{
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({version: 'v4', auth: client});
+    const Standings = await googleSheets.spreadsheets.values.get({
+        auth,
+        spreadsheetId: ABA7spreadsheetID,
+        range: 'ABA7Groups!A2:K5'
+    })
+    res.send(Standings.data);
+})
+
+app.get('/aba7standings/b', async (req,res)=>{
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({version: 'v4', auth: client});
+    const Standings = await googleSheets.spreadsheets.values.get({
+        auth,
+        spreadsheetId: ABA7spreadsheetID,
+        range: 'ABA7Groups!A7:K10'
+    })
+    res.send(Standings.data);
+})
+
+app.get('/aba7standings/c', async (req,res)=>{
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({version: 'v4', auth: client});
+    const Standings = await googleSheets.spreadsheets.values.get({
+        auth,
+        spreadsheetId: ABA7spreadsheetID,
+        range: 'ABA7Groups!A12:K15'
+    })
+    res.send(Standings.data);
+})
+
+app.get('/aba7standings/d', async (req,res)=>{
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({version: 'v4', auth: client});
+    const Standings = await googleSheets.spreadsheets.values.get({
+        auth,
+        spreadsheetId: ABA7spreadsheetID,
+        range: 'ABA7Groups!A17:K20'
+    })
+    res.send(Standings.data);
+})
+
 
 app.get('/aba7stats', async (req, res) => {
     const auth = new google.auth.GoogleAuth({
@@ -58,6 +133,8 @@ app.get('/aba7stats', async (req, res) => {
     })
     res.send(StatsData.data.values);
 })
+
+// IMAGES FOR GALLERY -----------------------
 
 app.get('/aba6images', async (req, res) => {
 
@@ -94,6 +171,11 @@ app.get('/aba5images', async (req, res) => {
         }
     });
 });
+
+// ------------------------------------------
+
+
+// FANTASY ENDPOINTS -----------------------
 
 app.get('/aba7fantasy', async (req, res) => {
     const auth = new google.auth.GoogleAuth({
@@ -150,6 +232,7 @@ app.post('/aba7fantasy', async (req, res) =>{
       res.send(response)
 } )
 
+// ------------------------------------------
 
 app.post('/image', async (req, res) =>{
 
@@ -173,7 +256,6 @@ app.post('/image', async (req, res) =>{
       });
       res.send(response)
 } )
-
 
 
 app.listen(3001, (req, res) => {
