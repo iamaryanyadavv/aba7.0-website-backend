@@ -207,22 +207,40 @@ app.get('/aba5images', async (req, res) => {
 
 // FANTASY ENDPOINTS -----------------------
 
-app.get('/aba7fantasy', async (req, res) => {
+app.get('/fantasy/getTeam', async (req, res) => {
+    const userEmail = req.query.email;
+
+    if (!userEmail) {
+        return res.status(400).send({ error: 'Email parameter is required.' });
+    }
+
     const auth = new google.auth.GoogleAuth({
         keyFile: 'credentials.json',
         scopes: 'https://www.googleapis.com/auth/spreadsheets'
-    })
+    });
+
     const client = await auth.getClient();
     const googleSheets = google.sheets({ version: 'v4', auth: client });
+    
     const FantasyData = await googleSheets.spreadsheets.values.get({
         auth,
         spreadsheetId: ABA7spreadsheetID,
         range: 'ABA7Fantasy!2:900'
-    })
-    res.send(FantasyData.data);
-})
+    });
 
-app.post('/aba7fantasy', async (req, res) =>{
+    // Assuming the email is in the 3rd column (index 2 of the array)
+    const userRow = FantasyData.data.values.find(row => row[2] === userEmail);
+
+    if (!userRow) {
+        return res.status(200).send([
+            {}, {}, {}, {}, {}
+        ]);
+    }
+
+    res.send(userRow);
+});
+
+app.post('/fantasy/saveTeam', async (req, res) =>{
 
     const auth = new google.auth.GoogleAuth({
         keyFile: 'credentials.json',
@@ -240,27 +258,109 @@ app.post('/aba7fantasy', async (req, res) =>{
                 req.body.picture,
                 req.body.name,
                 req.body.email,
-                req.body.authid,
                 req.body.player1,
-                req.body.player1email,
+                req.body.player1photo,
                 req.body.player1gender,
                 req.body.player2,
-                req.body.player2email,
+                req.body.player2photo,
                 req.body.player2gender,
                 req.body.player3,
-                req.body.player3email,
+                req.body.player3photo,
                 req.body.player3gender,
                 req.body.player4,
-                req.body.player4email,
+                req.body.player4photo,
                 req.body.player4gender,
                 req.body.player5,
-                req.body.player5email,
+                req.body.player5photo,
                 req.body.player5gender,
             ]],
         },
       });
       res.send(response)
 } )
+
+app.post('/fantasy/validateTeam', (req, res) => {
+    // Destructuring player data
+    const players = [
+        {
+            name: req.body.player1,
+            gender: req.body.player1gender,
+            price: req.body.player1price,
+            team: req.body.player1team
+        },
+        {
+            name: req.body.player2,
+            gender: req.body.player2gender,
+            price: req.body.player2price,
+            team: req.body.player2team
+        },
+        {
+            name: req.body.player3,
+            gender: req.body.player3gender,
+            price: req.body.player3price,
+            team: req.body.player3team
+        },
+        {
+            name: req.body.player4,
+            gender: req.body.player4gender,
+            price: req.body.player4price,
+            team: req.body.player4team
+        },
+        {
+            name: req.body.player5,
+            gender: req.body.player5gender,
+            price: req.body.player5price,
+            team: req.body.player5team
+        },
+    ];
+
+    // Check for missing player data
+    if (players.some(player => !player.name || !player.gender || !player.price || !player.team)) {
+        return res.status(400).send('Incomplete player data. Please ensure all players have their data properly set.');
+    }
+
+    // Condition 1: Maximum team value <= $50Mil
+    const totalValue = players.reduce((total, player) => total + parseFloat(player.price), 0);
+    if (totalValue > 50) {
+        return res.status(400).send('Total team value exceeds $50 million.');
+    }
+
+    // Condition 2: Minimum number of players to save your team = 5
+    if (players.length !== 5) {
+        return res.status(400).send('You must select 5 players.');
+    }
+
+    // Condition 3: Minimum number of women in your team = 2
+    const femalePlayers = players.filter(player => player.gender === 'Non Cis-Man').length;
+    if (femalePlayers < 2) {
+        return res.status(400).send('You must have at least 2 female players.');
+    }
+
+    // Condition 4: No more than 2 players from one team
+    const teamCounts = {};
+    players.forEach(player => {
+        if (!teamCounts[player.team]) {
+            teamCounts[player.team] = 1;
+        } else {
+            teamCounts[player.team]++;
+        }
+    });
+    
+    const overrepresentedTeams = Object.values(teamCounts).filter(count => count > 2);
+    if (overrepresentedTeams.length > 0) {
+        return res.status(400).send('You cannot have more than 2 players from the same team.');
+    }
+
+    // Condition 5: Cannot have the same player more than once in your team.
+    const uniquePlayers = new Set(players.map(player => player.name));
+    if (uniquePlayers.size !== players.length) {
+        return res.status(400).send('You cannot have duplicate players.');
+    }
+
+    // If all conditions are satisfied
+    res.status(200).send('Team is valid.');
+});
+
 
 // ------------------------------------------
 
