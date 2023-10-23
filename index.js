@@ -58,6 +58,36 @@ app.get('/aba7teamlist', async (req, res) => {
     res.send(TeamData.data.values);
 })
 
+app.get('/aba7games', async (req,res)=>{
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({version: 'v4', auth: client});
+    const Games = await googleSheets.spreadsheets.values.get({
+        auth,
+        spreadsheetId: ABA7spreadsheetID,
+        range: 'ABA7Games'
+    })
+    res.send(Games.data);
+})
+
+app.get('/aba7standings', async (req,res)=>{
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({version: 'v4', auth: client});
+    const Standings = await googleSheets.spreadsheets.values.get({
+        auth,
+        spreadsheetId: ABA7spreadsheetID,
+        range: 'ABA7Groups'
+    })
+    res.send(Standings.data);
+})
+
 app.get('/aba7standings/a', async (req,res)=>{
     const auth = new google.auth.GoogleAuth({
         keyFile: 'credentials.json',
