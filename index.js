@@ -13,6 +13,8 @@ app.use(cors());
 const ABA7spreadsheetID = '106TovGIMcMQ8miOds7L8zvi_67SNA4i-nRpG4l3fKo4'
 const bucketName = process.env.BUCKET_NAME
 
+// GAME TIME CONTENT -----------------------
+
 app.get('/aba7players', async (req, res) => {
     const auth = new google.auth.GoogleAuth({
         keyFile: 'credentials.json',
@@ -148,7 +150,6 @@ app.get('/aba7standings/d', async (req,res)=>{
     res.send(Standings.data);
 })
 
-
 app.get('/aba7stats', async (req, res) => {
     const auth = new google.auth.GoogleAuth({
         keyFile: 'credentials.json',
@@ -163,6 +164,9 @@ app.get('/aba7stats', async (req, res) => {
     })
     res.send(StatsData.data.values);
 })
+
+// ------------------------------------------
+
 
 // IMAGES FOR GALLERY -----------------------
 
@@ -233,7 +237,7 @@ app.get('/fantasy/getTeam', async (req, res) => {
 
     if (!userRow) {
         return res.status(200).send([
-            {}, {}, {}, {}, {}
+            [], [], [], [], []
         ]);
     }
 
@@ -253,33 +257,36 @@ app.post('/fantasy/saveTeam', async (req, res) =>{
         range: "ABA7Fantasy",
         valueInputOption: "USER_ENTERED",
         resource: {
-            // image, firstname, middlename, lastname, emailid, batch, phone, gender, primarypos, secondpos, comment
             values: [[
                 req.body.picture,
                 req.body.name,
                 req.body.email,
-                req.body.player1,
                 req.body.player1photo,
+                req.body.player1,
                 req.body.player1gender,
                 req.body.player1price,
                 req.body.player1team,
-                req.body.player2,
+
                 req.body.player2photo,
+                req.body.player2,
                 req.body.player2gender,
                 req.body.player2price,
                 req.body.player2team,
-                req.body.player3,
+
                 req.body.player3photo,
+                req.body.player3,
                 req.body.player3gender,
                 req.body.player3price,
                 req.body.player3team,
-                req.body.player4,
+
                 req.body.player4photo,
+                req.body.player4,
                 req.body.player4gender,
                 req.body.player4price,
                 req.body.player5team,
-                req.body.player5,
+
                 req.body.player5photo,
+                req.body.player5,
                 req.body.player5gender,
                 req.body.player5price,
                 req.body.player5team,
@@ -343,7 +350,7 @@ app.post('/fantasy/validateTeam', (req, res) => {
     // Condition 3: Minimum number of women in your team = 2
     const femalePlayers = players.filter(player => player.gender === 'Non Cis-Man').length;
     if (femalePlayers < 2) {
-        return res.status(400).send('You must have at least 2 female players.');
+        return res.status(400).send('You must have at least 2 non-cis men players.');
     }
 
     // Condition 4: No more than 2 players from one team
@@ -374,29 +381,28 @@ app.post('/fantasy/validateTeam', (req, res) => {
 
 // ------------------------------------------
 
-app.post('/image', async (req, res) =>{
+// app.post('/image', async (req, res) =>{
 
-    const auth = new google.auth.GoogleAuth({
-        keyFile: 'credentials.json',
-        scopes: 'https://www.googleapis.com/auth/spreadsheets'
-    })
-    const client = await auth.getClient();
-    const googleSheets = google.sheets({version: 'v4', auth: client});
-    const response = await googleSheets.spreadsheets.values.append({
-        spreadsheetId: ABA7spreadsheetID,
-        range: "ABA7Images",
-        valueInputOption: "USER_ENTERED",
-        resource: {
-            // image, firstname, middlename, lastname, emailid, batch, phone, gender, primarypos, secondpos, comment
-            values: [[
-                req.body.image,
-                req.body.name
-            ]],
-        },
-      });
-      res.send(response)
-} )
-
+//     const auth = new google.auth.GoogleAuth({
+//         keyFile: 'credentials.json',
+//         scopes: 'https://www.googleapis.com/auth/spreadsheets'
+//     })
+//     const client = await auth.getClient();
+//     const googleSheets = google.sheets({version: 'v4', auth: client});
+//     const response = await googleSheets.spreadsheets.values.append({
+//         spreadsheetId: ABA7spreadsheetID,
+//         range: "ABA7Images",
+//         valueInputOption: "USER_ENTERED",
+//         resource: {
+//             // image, firstname, middlename, lastname, emailid, batch, phone, gender, primarypos, secondpos, comment
+//             values: [[
+//                 req.body.image,
+//                 req.body.name
+//             ]],
+//         },
+//       });
+//       res.send(response)
+// } )
 
 app.listen(3001, (req, res) => {
     console.log("Running on Port: 3001")
