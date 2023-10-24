@@ -286,7 +286,7 @@ app.post('/fantasy/saveTeam', async (req, res) =>{
                 req.body.player4,
                 req.body.player4gender,
                 req.body.player4price,
-                req.body.player5team,
+                req.body.player4team,
                 req.body.player4tier,
 
                 req.body.player5photo,
