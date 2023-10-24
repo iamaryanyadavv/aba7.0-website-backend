@@ -233,7 +233,8 @@ app.get('/fantasy/getTeam', async (req, res) => {
     });
 
     // Assuming the email is in the 3rd column (index 2 of the array)
-    const userRow = FantasyData.data.values.find(row => row[2] === userEmail);
+    const userRow = [...FantasyData.data.values].reverse().find(row => row[2] === userEmail);
+
 
     if (!userRow) {
         return res.status(200).send([
