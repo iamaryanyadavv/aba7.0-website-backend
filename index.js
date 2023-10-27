@@ -383,6 +383,33 @@ app.post('/fantasy/validateTeam', (req, res) => {
     res.status(200).send('Team is valid.');
 });
 
+app.get('/fantasy/getAllTeams', async (req, res) => {
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    });
+
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({ version: 'v4', auth: client });
+    
+    const FantasyData = await googleSheets.spreadsheets.values.get({
+        auth,
+        spreadsheetId: ABA7spreadsheetID,
+        range: 'ABA7Fantasy!2:900'
+    });
+
+    // Assuming the email is in the 3rd column (index 2 of the array)
+    const userRow = FantasyData.data.values.find(row => row[2] === userEmail);
+
+    if (!userRow) {
+        return res.status(200).send([
+            [], [], [], [], []
+        ]);
+    }
+
+    res.send(userRow);
+});
+
 
 // ------------------------------------------
 
