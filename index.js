@@ -233,7 +233,8 @@ app.get('/fantasy/getTeam', async (req, res) => {
     });
 
     // Assuming the email is in the 3rd column (index 2 of the array)
-    const userRow = FantasyData.data.values.find(row => row[2] === userEmail);
+    const userRow = [...FantasyData.data.values].reverse().find(row => row[2] === userEmail);
+
 
     if (!userRow) {
         return res.status(200).send([
@@ -267,6 +268,8 @@ app.post('/fantasy/saveTeam', async (req, res) =>{
                 req.body.player1price,
                 req.body.player1team,
                 req.body.player1tier,
+                req.body.player1key,
+
 
                 req.body.player2photo,
                 req.body.player2,
@@ -274,6 +277,7 @@ app.post('/fantasy/saveTeam', async (req, res) =>{
                 req.body.player2price,
                 req.body.player2team,
                 req.body.player2tier,
+                req.body.player2key,
 
                 req.body.player3photo,
                 req.body.player3,
@@ -281,6 +285,7 @@ app.post('/fantasy/saveTeam', async (req, res) =>{
                 req.body.player3price,
                 req.body.player3team,
                 req.body.player3tier,
+                req.body.player3key,
 
                 req.body.player4photo,
                 req.body.player4,
@@ -288,6 +293,7 @@ app.post('/fantasy/saveTeam', async (req, res) =>{
                 req.body.player4price,
                 req.body.player4team,
                 req.body.player4tier,
+                req.body.player4key,
 
                 req.body.player5photo,
                 req.body.player5,
@@ -295,6 +301,7 @@ app.post('/fantasy/saveTeam', async (req, res) =>{
                 req.body.player5price,
                 req.body.player5team,
                 req.body.player5tier,
+                req.body.player5key,
             ]],
         },
       });
