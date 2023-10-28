@@ -402,19 +402,17 @@ app.get('/fantasy/getAllTeams', async (req, res) => {
     const FantasyData = await googleSheets.spreadsheets.values.get({
         auth,
         spreadsheetId: ABA7spreadsheetID,
-        range: 'ABA7Fantasy!2:900'
+        range: 'ABA7Fantasy!3:900'
     });
 
-    // Assuming the email is in the 3rd column (index 2 of the array)
-    const userRow = FantasyData.data.values.find(row => row[2] === userEmail);
+    var allTeams = {}
 
-    if (!userRow) {
-        return res.status(200).send([
-            [], [], [], [], []
-        ]);
-    }
+    FantasyData.data.values.map((team)=>{
 
-    res.send(userRow);
+        allTeams[team[2]] = team
+
+    })
+    res.send(allTeams)
 });
 
 
