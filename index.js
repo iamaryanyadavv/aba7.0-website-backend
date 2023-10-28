@@ -459,7 +459,7 @@ app.get('/fantasy/getAllTeams', async (req, res) => {
     res.send(teams)
 });
 
-app.get('/fantasy/getPlayers', async (req, res) => {
+app.get('/fantasy/getAllPlayers', async (req, res) => {
     const auth = new google.auth.GoogleAuth({
         keyFile: 'credentials.json',
         scopes: 'https://www.googleapis.com/auth/spreadsheets'
@@ -468,64 +468,33 @@ app.get('/fantasy/getPlayers', async (req, res) => {
     const client = await auth.getClient();
     const googleSheets = google.sheets({ version: 'v4', auth: client });
 
-    const FantasyData = await googleSheets.spreadsheets.values.get({
+    const PlayerData = await googleSheets.spreadsheets.values.get({
         auth,
         spreadsheetId: ABA7spreadsheetID,
-        range: 'ABA7Fantasy!3:900'
+        range: 'ABA7Players!2:900'
     });
 
-    var allTeams = {}
+    var allPlayers = {}
 
-    FantasyData.data.values.map((team) => {
-
-        // allTeams[team[2]] = team
-
-        allTeams[team[2]] = [
-            team[0], //pic 
-            team[1], //name
-            team[2], //email
-
-            team[3], //p1 pic
-            team[4], //p1 name
-            team[5], //p1 gender
-            team[6], //p1 fantasy price
-
-            team[10], //p2 pic
-            team[11], //p2 name
-            team[12], //p2 gender
-            team[13], //p2 fantasy price
-
-            team[17], //p3 pic
-            team[18], //p3 name
-            team[19], //p3 gender
-            team[20], //p3 fantasy price
-
-            team[24], //p4 pic
-            team[25], //p4 name
-            team[26], //p4 gender
-            team[27], //p4 fantasy price
-
-            team[31], //p5 pic
-            team[32], //p5 name
-            team[33], //p5 gender
-            team[34], //p5 fantasy price
-
-            team[38]
+    PlayerData.data.values.map((player)=>{
+        allPlayers[player[1]] = [
+            player[0], //pic
+            player[1], //name
+            player[13], // points
+            player[14], // rebounds
+            player[15], // assists
+            player[16], // steals
+            player[17], // fouls
+            player[18], // blocks
+            player[19], //fantasy points
+            player[20], //fantasy price
+            [], //stats array
         ]
-
     })
 
-    var teams = []
+    // allPlayers.sort((a, b) => b[8] - a[8])
 
-    for (const key in allTeams) {
-        if (allTeams[key][1] != '') {
-            teams.push(allTeams[key])
-        }
-    }
-    teams.sort((a, b) => a[23] - b[23])
-    teams.reverse()
-
-    res.send(teams)
+    res.send(allPlayers)
 });
 
 
