@@ -60,13 +60,13 @@ app.get('/aba7teamlist', async (req, res) => {
     res.send(TeamData.data.values);
 })
 
-app.get('/aba7games', async (req,res)=>{
+app.get('/aba7games', async (req, res) => {
     const auth = new google.auth.GoogleAuth({
         keyFile: 'credentials.json',
         scopes: 'https://www.googleapis.com/auth/spreadsheets'
     })
     const client = await auth.getClient();
-    const googleSheets = google.sheets({version: 'v4', auth: client});
+    const googleSheets = google.sheets({ version: 'v4', auth: client });
     const Games = await googleSheets.spreadsheets.values.get({
         auth,
         spreadsheetId: ABA7spreadsheetID,
@@ -75,13 +75,13 @@ app.get('/aba7games', async (req,res)=>{
     res.send(Games.data);
 })
 
-app.get('/aba7standings', async (req,res)=>{
+app.get('/aba7standings', async (req, res) => {
     const auth = new google.auth.GoogleAuth({
         keyFile: 'credentials.json',
         scopes: 'https://www.googleapis.com/auth/spreadsheets'
     })
     const client = await auth.getClient();
-    const googleSheets = google.sheets({version: 'v4', auth: client});
+    const googleSheets = google.sheets({ version: 'v4', auth: client });
     const Standings = await googleSheets.spreadsheets.values.get({
         auth,
         spreadsheetId: ABA7spreadsheetID,
@@ -90,13 +90,13 @@ app.get('/aba7standings', async (req,res)=>{
     res.send(Standings.data);
 })
 
-app.get('/aba7standings/a', async (req,res)=>{
+app.get('/aba7standings/a', async (req, res) => {
     const auth = new google.auth.GoogleAuth({
         keyFile: 'credentials.json',
         scopes: 'https://www.googleapis.com/auth/spreadsheets'
     })
     const client = await auth.getClient();
-    const googleSheets = google.sheets({version: 'v4', auth: client});
+    const googleSheets = google.sheets({ version: 'v4', auth: client });
     const Standings = await googleSheets.spreadsheets.values.get({
         auth,
         spreadsheetId: ABA7spreadsheetID,
@@ -105,13 +105,13 @@ app.get('/aba7standings/a', async (req,res)=>{
     res.send(Standings.data);
 })
 
-app.get('/aba7standings/b', async (req,res)=>{
+app.get('/aba7standings/b', async (req, res) => {
     const auth = new google.auth.GoogleAuth({
         keyFile: 'credentials.json',
         scopes: 'https://www.googleapis.com/auth/spreadsheets'
     })
     const client = await auth.getClient();
-    const googleSheets = google.sheets({version: 'v4', auth: client});
+    const googleSheets = google.sheets({ version: 'v4', auth: client });
     const Standings = await googleSheets.spreadsheets.values.get({
         auth,
         spreadsheetId: ABA7spreadsheetID,
@@ -120,13 +120,13 @@ app.get('/aba7standings/b', async (req,res)=>{
     res.send(Standings.data);
 })
 
-app.get('/aba7standings/c', async (req,res)=>{
+app.get('/aba7standings/c', async (req, res) => {
     const auth = new google.auth.GoogleAuth({
         keyFile: 'credentials.json',
         scopes: 'https://www.googleapis.com/auth/spreadsheets'
     })
     const client = await auth.getClient();
-    const googleSheets = google.sheets({version: 'v4', auth: client});
+    const googleSheets = google.sheets({ version: 'v4', auth: client });
     const Standings = await googleSheets.spreadsheets.values.get({
         auth,
         spreadsheetId: ABA7spreadsheetID,
@@ -135,13 +135,13 @@ app.get('/aba7standings/c', async (req,res)=>{
     res.send(Standings.data);
 })
 
-app.get('/aba7standings/d', async (req,res)=>{
+app.get('/aba7standings/d', async (req, res) => {
     const auth = new google.auth.GoogleAuth({
         keyFile: 'credentials.json',
         scopes: 'https://www.googleapis.com/auth/spreadsheets'
     })
     const client = await auth.getClient();
-    const googleSheets = google.sheets({version: 'v4', auth: client});
+    const googleSheets = google.sheets({ version: 'v4', auth: client });
     const Standings = await googleSheets.spreadsheets.values.get({
         auth,
         spreadsheetId: ABA7spreadsheetID,
@@ -225,7 +225,7 @@ app.get('/fantasy/getTeam', async (req, res) => {
 
     const client = await auth.getClient();
     const googleSheets = google.sheets({ version: 'v4', auth: client });
-    
+
     const FantasyData = await googleSheets.spreadsheets.values.get({
         auth,
         spreadsheetId: ABA7spreadsheetID,
@@ -245,14 +245,14 @@ app.get('/fantasy/getTeam', async (req, res) => {
     res.send(userRow);
 });
 
-app.post('/fantasy/saveTeam', async (req, res) =>{
+app.post('/fantasy/saveTeam', async (req, res) => {
 
     const auth = new google.auth.GoogleAuth({
         keyFile: 'credentials.json',
         scopes: 'https://www.googleapis.com/auth/spreadsheets'
     })
     const client = await auth.getClient();
-    const googleSheets = google.sheets({version: 'v4', auth: client});
+    const googleSheets = google.sheets({ version: 'v4', auth: client });
     const response = await googleSheets.spreadsheets.values.append({
         spreadsheetId: ABA7spreadsheetID,
         range: "ABA7Fantasy",
@@ -304,9 +304,9 @@ app.post('/fantasy/saveTeam', async (req, res) =>{
                 req.body.player5key,
             ]],
         },
-      });
-      res.send(response)
-} )
+    });
+    res.send(response)
+})
 
 app.post('/fantasy/validateTeam', (req, res) => {
     // Destructuring player data
@@ -374,7 +374,7 @@ app.post('/fantasy/validateTeam', (req, res) => {
             teamCounts[player.team]++;
         }
     });
-    
+
     const overrepresentedTeams = Object.values(teamCounts).filter(count => count > 2);
     if (overrepresentedTeams.length > 0) {
         return res.status(400).send('You cannot have more than 2 players from the same team.');
@@ -398,7 +398,7 @@ app.get('/fantasy/getAllTeams', async (req, res) => {
 
     const client = await auth.getClient();
     const googleSheets = google.sheets({ version: 'v4', auth: client });
-    
+
     const FantasyData = await googleSheets.spreadsheets.values.get({
         auth,
         spreadsheetId: ABA7spreadsheetID,
@@ -407,11 +407,11 @@ app.get('/fantasy/getAllTeams', async (req, res) => {
 
     var allTeams = {}
 
-    FantasyData.data.values.map((team)=>{
+    FantasyData.data.values.map((team) => {
 
         // allTeams[team[2]] = team
 
-        allTeams[team[2]] = [ 
+        allTeams[team[2]] = [
             team[0], //pic 
             team[1], //name
             team[2], //email
@@ -445,7 +445,87 @@ app.get('/fantasy/getAllTeams', async (req, res) => {
         ]
 
     })
-    res.send(allTeams)
+
+    var teams = []
+
+    for (const key in allTeams) {
+        if (allTeams[key][1] != '') {
+            teams.push(allTeams[key])
+        }
+    }
+    teams.sort((a, b) => a[23] - b[23])
+    teams.reverse()
+
+    res.send(teams)
+});
+
+app.get('/fantasy/getPlayers', async (req, res) => {
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    });
+
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({ version: 'v4', auth: client });
+
+    const FantasyData = await googleSheets.spreadsheets.values.get({
+        auth,
+        spreadsheetId: ABA7spreadsheetID,
+        range: 'ABA7Fantasy!3:900'
+    });
+
+    var allTeams = {}
+
+    FantasyData.data.values.map((team) => {
+
+        // allTeams[team[2]] = team
+
+        allTeams[team[2]] = [
+            team[0], //pic 
+            team[1], //name
+            team[2], //email
+
+            team[3], //p1 pic
+            team[4], //p1 name
+            team[5], //p1 gender
+            team[6], //p1 fantasy price
+
+            team[10], //p2 pic
+            team[11], //p2 name
+            team[12], //p2 gender
+            team[13], //p2 fantasy price
+
+            team[17], //p3 pic
+            team[18], //p3 name
+            team[19], //p3 gender
+            team[20], //p3 fantasy price
+
+            team[24], //p4 pic
+            team[25], //p4 name
+            team[26], //p4 gender
+            team[27], //p4 fantasy price
+
+            team[31], //p5 pic
+            team[32], //p5 name
+            team[33], //p5 gender
+            team[34], //p5 fantasy price
+
+            team[38]
+        ]
+
+    })
+
+    var teams = []
+
+    for (const key in allTeams) {
+        if (allTeams[key][1] != '') {
+            teams.push(allTeams[key])
+        }
+    }
+    teams.sort((a, b) => a[23] - b[23])
+    teams.reverse()
+
+    res.send(teams)
 });
 
 
