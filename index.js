@@ -409,7 +409,38 @@ app.get('/fantasy/getAllTeams', async (req, res) => {
 
     FantasyData.data.values.map((team)=>{
 
-        allTeams[team[2]] = team
+        // allTeams[team[2]] = team
+
+        allTeams[team[2]] = [ 
+            team[0], //pic 
+            team[1], //name
+            team[2], //email
+
+            team[3], //p1 pic
+            team[4], //p1 name
+            team[5], //p1 gender
+            team[6], //p1 fantasy price
+
+            team[10], //p2 pic
+            team[11], //p2 name
+            team[12], //p2 gender
+            team[13], //p2 fantasy price
+
+            team[17], //p3 pic
+            team[18], //p3 name
+            team[19], //p3 gender
+            team[20], //p3 fantasy price
+
+            team[24], //p4 pic
+            team[25], //p4 name
+            team[26], //p4 gender
+            team[27], //p4 fantasy price
+
+            team[31], //p5 pic
+            team[32], //p5 name
+            team[33], //p5 gender
+            team[34], //p5 fantasy price
+        ]
 
     })
     res.send(allTeams)
