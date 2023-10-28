@@ -440,6 +440,8 @@ app.get('/fantasy/getAllTeams', async (req, res) => {
             team[32], //p5 name
             team[33], //p5 gender
             team[34], //p5 fantasy price
+
+            team[38]
         ]
 
     })
