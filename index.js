@@ -4,6 +4,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import s3 from './s3.js';
 import dotenv from 'dotenv';
+import { start } from 'repl';
 
 dotenv.config()
 const app = express();
@@ -163,6 +164,266 @@ app.get('/aba7stats', async (req, res) => {
         range: 'ABA7Stats!2:900'
     })
     res.send(StatsData.data.values);
+})
+
+app.get('/aba7/leaderboard/points', async (req, res) => {
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({ version: 'v4', auth: client });
+    const LDRBPoints = await googleSheets.spreadsheets.values.get({
+        auth,
+        spreadsheetId: ABA7spreadsheetID,
+        range: 'ABA7Stats!2:900'
+    })
+
+    var ldrbPoints = {}
+    LDRBPoints.data.values.map((statRow)=>{
+        ldrbPoints[statRow[0]] = [
+            statRow[0],
+            0,
+            0,
+            []
+        ]
+    })
+
+    LDRBPoints.data.values.map((statRow)=>{
+        var name = statRow[0]
+        var newPoints = parseFloat(statRow[4])
+        var newStatRow = [
+            statRow[0], //name
+            statRow[2], //against
+            statRow[4], //points
+        ]
+        var previousPoints = parseFloat(ldrbPoints[name][1])
+        var finalPoints = newPoints + previousPoints
+
+        ldrbPoints[name][1] = finalPoints
+        ldrbPoints[name][3].push(newStatRow)
+    })
+
+    var finalPoints = []
+    for (const key in ldrbPoints){
+        finalPoints.push(ldrbPoints[key])
+    }
+
+    finalPoints.map((player)=>{
+        player[2] = parseFloat( parseFloat(player[1]) / parseFloat(player[3].length) )
+    })
+
+    // var finalPointsTotal = finalPoints.sort((a, b) => b[1] - a[1])
+
+    res.send(finalPoints);
+})
+
+app.get('/aba7/leaderboard/assists', async (req, res) => {
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({ version: 'v4', auth: client });
+    const LDRBAssists = await googleSheets.spreadsheets.values.get({
+        auth,
+        spreadsheetId: ABA7spreadsheetID,
+        range: 'ABA7Stats!2:900'
+    })
+
+    var ldrbAssists = {}
+    LDRBAssists.data.values.map((statRow)=>{
+        ldrbAssists[statRow[0]] = [
+            statRow[0],
+            0,
+            0,
+            []
+        ]
+    })
+
+    LDRBAssists.data.values.map((statRow)=>{
+        var name = statRow[0]
+        var newAssists = parseFloat(statRow[6])
+        var newStatRow = [
+            statRow[0], //name
+            statRow[2], //against
+            statRow[6], //assists
+        ]
+        var previousAssists = parseFloat(ldrbAssists[name][1])
+        var finalAssists = newAssists + previousAssists
+
+        ldrbAssists[name][1] = finalAssists
+        ldrbAssists[name][3].push(newStatRow)
+    })
+
+    var finalAssists = []
+    for (const key in ldrbAssists){
+        finalAssists.push(ldrbAssists[key])
+    }
+
+    finalAssists.map((player)=>{
+        player[2] = parseFloat( parseFloat(player[1]) / parseFloat(player[3].length) )
+    })
+
+    // var finalAssistsTotal = finalAssists.sort((a, b) => b[1] - a[1])
+    // var finalAssistsAverage = finalAssists.sort((a, b)=> b[2] - a[2])
+    res.send(finalAssists);
+})
+
+app.get('/aba7/leaderboard/rebounds', async (req, res) => {
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({ version: 'v4', auth: client });
+    const LDRBRebounds = await googleSheets.spreadsheets.values.get({
+        auth,
+        spreadsheetId: ABA7spreadsheetID,
+        range: 'ABA7Stats!2:900'
+    })
+
+    var ldrbRebounds = {}
+    LDRBRebounds.data.values.map((statRow)=>{
+        ldrbRebounds[statRow[0]] = [
+            statRow[0],
+            0,
+            0,
+            []
+        ]
+    })
+
+    LDRBRebounds.data.values.map((statRow)=>{
+        var name = statRow[0]
+        var newRebounds = parseFloat(statRow[5])
+        var newStatRow = [
+            statRow[0], //name
+            statRow[2], //against
+            statRow[5], //Rebounds
+        ]
+        var previousRebounds = parseFloat(ldrbRebounds[name][1])
+        var finalRebounds = newRebounds + previousRebounds
+
+        ldrbRebounds[name][1] = finalRebounds
+        ldrbRebounds[name][3].push(newStatRow)
+    })
+
+    var finalRebounds = []
+    for (const key in ldrbRebounds){
+        finalRebounds.push(ldrbRebounds[key])
+    }
+
+    finalRebounds.map((player)=>{
+        player[2] = parseFloat( parseFloat(player[1]) / parseFloat(player[3].length) )
+    })
+
+    // var finalReboundsTotal = finalRebounds.sort((a, b) => b[1] - a[1])
+    // var finalAssistsAverage = finalAssists.sort((a, b)=> b[2] - a[2])
+    res.send(finalRebounds);
+})
+
+app.get('/aba7/leaderboard/steals', async (req, res) => {
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({ version: 'v4', auth: client });
+    const LDRBSteals = await googleSheets.spreadsheets.values.get({
+        auth,
+        spreadsheetId: ABA7spreadsheetID,
+        range: 'ABA7Stats!2:900'
+    })
+
+    var ldrbSteals = {}
+    LDRBSteals.data.values.map((statRow)=>{
+        ldrbSteals[statRow[0]] = [
+            statRow[0],
+            0,
+            0,
+            []
+        ]
+    })
+
+    LDRBSteals.data.values.map((statRow)=>{
+        var name = statRow[0]
+        var newSteals = parseFloat(statRow[7])
+        var newStatRow = [
+            statRow[0], //name
+            statRow[2], //against
+            statRow[7], //Rebounds
+        ]
+        var previousSteals = parseFloat(ldrbSteals[name][1])
+        var finalSteals = newSteals + previousSteals
+
+        ldrbSteals[name][1] = finalSteals
+        ldrbSteals[name][3].push(newStatRow)
+    })
+
+    var finalSteals = []
+    for (const key in ldrbSteals){
+        finalSteals.push(ldrbSteals[key])
+    }
+
+    finalSteals.map((player)=>{
+        player[2] = parseFloat( parseFloat(player[1]) / parseFloat(player[3].length) )
+    })
+
+    // var finalStealsTotal = finalSteals.sort((a, b) => b[1] - a[1])
+    // var finalAssistsAverage = finalAssists.sort((a, b)=> b[2] - a[2])
+    res.send(finalSteals);
+})
+
+app.get('/aba7/leaderboard/blocks', async (req, res) => {
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({ version: 'v4', auth: client });
+    const LDRBBlocks = await googleSheets.spreadsheets.values.get({
+        auth,
+        spreadsheetId: ABA7spreadsheetID,
+        range: 'ABA7Stats!2:900'
+    })
+
+    var ldrbBlocks = {}
+    LDRBBlocks.data.values.map((statRow)=>{
+        ldrbBlocks[statRow[0]] = [
+            statRow[0],
+            0,
+            0,
+            []
+        ]
+    })
+
+    LDRBBlocks.data.values.map((statRow)=>{
+        var name = statRow[0]
+        var newBlocks = parseFloat(statRow[12])
+        var newStatRow = [
+            statRow[0], //name
+            statRow[2], //against
+            statRow[12], //blocks
+        ]
+        var previousBlocks = parseFloat(ldrbBlocks[name][1])
+        var finalBlocks = newBlocks + previousBlocks
+
+        ldrbBlocks[name][1] = finalBlocks
+        ldrbBlocks[name][3].push(newStatRow)
+    })
+
+    var finalBlocks = []
+    for (const key in ldrbBlocks){
+        finalBlocks.push(ldrbBlocks[key])
+    }
+
+    finalBlocks.map((player)=>{
+        player[2] = parseFloat( parseFloat(player[1]) / parseFloat(player[3].length) )
+    })
+
+    // var finalBlocksTotal = finalBlocks.sort((a, b) => b[1] - a[1])
+    // var finalAssistsAverage = finalAssists.sort((a, b)=> b[2] - a[2])
+    res.send(finalBlocks);
 })
 
 // ------------------------------------------
