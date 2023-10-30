@@ -213,9 +213,15 @@ app.get('/aba7/leaderboard/points', async (req, res) => {
         player[2] = parseFloat( parseFloat(player[1]) / parseFloat(player[3].length) )
     })
 
-    // var finalPointsTotal = finalPoints.sort((a, b) => b[1] - a[1])
+    var finalPointsAVG = finalPoints.sort((a, b) => b[2] - a[2])
+    var finalPointsTotal = finalPoints.sort((a, b) => b[1] - a[1])
 
-    res.send(finalPoints);
+    var PointsData = {
+        'Total' : finalPointsTotal,
+        'Average' : finalPointsAVG
+    }
+
+    res.send(PointsData);
 })
 
 app.get('/aba7/leaderboard/assists', async (req, res) => {
@@ -265,9 +271,15 @@ app.get('/aba7/leaderboard/assists', async (req, res) => {
         player[2] = parseFloat( parseFloat(player[1]) / parseFloat(player[3].length) )
     })
 
-    // var finalAssistsTotal = finalAssists.sort((a, b) => b[1] - a[1])
-    // var finalAssistsAverage = finalAssists.sort((a, b)=> b[2] - a[2])
-    res.send(finalAssists);
+    var finalAssistsAVG = finalAssists.sort((a, b) => b[2] - a[2])
+    var finalAssistsTotal = finalAssists.sort((a, b) => b[1] - a[1])
+
+    var AssistsData = {
+        'Total' : finalAssistsTotal,
+        'Average' : finalAssistsAVG
+    }
+
+    res.send(AssistsData);
 })
 
 app.get('/aba7/leaderboard/rebounds', async (req, res) => {
@@ -317,9 +329,15 @@ app.get('/aba7/leaderboard/rebounds', async (req, res) => {
         player[2] = parseFloat( parseFloat(player[1]) / parseFloat(player[3].length) )
     })
 
-    // var finalReboundsTotal = finalRebounds.sort((a, b) => b[1] - a[1])
-    // var finalAssistsAverage = finalAssists.sort((a, b)=> b[2] - a[2])
-    res.send(finalRebounds);
+    var finalReboundsAVG = finalRebounds.sort((a, b) => b[2] - a[2])
+    var finalReboundsTotal = finalRebounds.sort((a, b) => b[1] - a[1])
+
+    var ReboundsData = {
+        'Total' : finalReboundsTotal,
+        'Average' : finalReboundsAVG
+    }
+
+    res.send(ReboundsData);
 })
 
 app.get('/aba7/leaderboard/steals', async (req, res) => {
@@ -369,9 +387,15 @@ app.get('/aba7/leaderboard/steals', async (req, res) => {
         player[2] = parseFloat( parseFloat(player[1]) / parseFloat(player[3].length) )
     })
 
-    // var finalStealsTotal = finalSteals.sort((a, b) => b[1] - a[1])
-    // var finalAssistsAverage = finalAssists.sort((a, b)=> b[2] - a[2])
-    res.send(finalSteals);
+    var finalStealsAVG = finalSteals.sort((a, b) => b[2] - a[2])
+    var finalStealsTotal = finalSteals.sort((a, b) => b[1] - a[1])
+
+    var StealsData = {
+        'Total' : finalStealsTotal,
+        'Average' : finalStealsAVG
+    }
+
+    res.send(StealsData);
 })
 
 app.get('/aba7/leaderboard/blocks', async (req, res) => {
@@ -421,9 +445,15 @@ app.get('/aba7/leaderboard/blocks', async (req, res) => {
         player[2] = parseFloat( parseFloat(player[1]) / parseFloat(player[3].length) )
     })
 
-    // var finalBlocksTotal = finalBlocks.sort((a, b) => b[1] - a[1])
-    // var finalAssistsAverage = finalAssists.sort((a, b)=> b[2] - a[2])
-    res.send(finalBlocks);
+    var finalBlocksAVG = finalBlocks.sort((a, b) => b[2] - a[2])
+    var finalBlocksTotal = finalBlocks.sort((a, b) => b[1] - a[1])
+
+    var BlocksData = {
+        'Total' : finalBlocksTotal,
+        'Average' : finalBlocksAVG
+    }
+
+    res.send(BlocksData);
 })
 
 // ------------------------------------------
